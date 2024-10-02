@@ -15,7 +15,7 @@ std::vector<cv::Point2f> Get8Pix(const cv::Point2f &keypoints_1,std::vector<cv::
     return pix_surround;
 }
 
-std::vector<cv::Point2f> diff(const std::vector<cv::Point2f>& vec1,const std::vector<cv::Point2f> &vec2,float camera_fx = 1, float camera_fy = 1)
+std::vector<cv::Point2f> diff(const std::vector<cv::Point2f>& vec1,const std::vector<cv::Point2f> &vec2,float camera_fx, float camera_fy)
 {
     std::vector<cv::Point2f> result;
     result.reserve(vec1.size());
@@ -28,7 +28,7 @@ std::vector<cv::Point2f> diff(const std::vector<cv::Point2f>& vec1,const std::ve
     return result;
 }
 
-std::vector<cv::Point2f> OFCal(const std::vector<cv::Point2f> &pixels,const cv::Mat &frame1, const cv::Mat &frame2,std::vector<uchar> &status,float camera_fx = 1.0F,float camera_fy = 1.0F)
+std::vector<cv::Point2f> OFCal(const std::vector<cv::Point2f> &pixels,const cv::Mat &frame1, const cv::Mat &frame2,std::vector<uchar> &status,float camera_fx,float camera_fy)
 {
     int maxlevel = 4;
     std::vector<float> error;
@@ -71,7 +71,7 @@ bool WhetherChase(const std::vector<cv::Point2f> &neighbors,const std::vector<uc
     return true;
 }
 
-std::vector<cv::Point3f> Pixel23D(std::vector<cv::Point2f> &keypoints_1,const cv::Mat &img1,const cv::Mat &img2,float camera_fx = 1.0F,float camera_fy = 1.0F)
+std::vector<cv::Point3f> Pixel23D(std::vector<cv::Point2f> &keypoints_1,const cv::Mat &img1,const cv::Mat &img2,float camera_fx,float camera_fy)
 {
     std::vector<cv::Point3f> KP3D;
     std::vector<cv::Point2f> pix_surround;
@@ -211,7 +211,7 @@ void estimatePlaneRansac(const std::vector<cv::Point3f> &points, std::vector<cv:
     }
 }
 
-void KeypointDynamicOpticalDef(std::vector<cv::Point2f> &keypoints_1,const cv::Mat &img1,const cv::Mat &img2,std::vector<cv::Point2f> &static_kps, std::vector<cv::Point2f> &dynamic_kps, double threshold,float camera_fx = 1.0F,float camera_fy = 1.0F)
+void KeypointDynamicOpticalDef(std::vector<cv::Point2f> &keypoints_1,const cv::Mat &img1,const cv::Mat &img2,std::vector<cv::Point2f> &static_kps, std::vector<cv::Point2f> &dynamic_kps, double threshold,float camera_fx, float camera_fy)
 {
     std::vector<cv::Point3f> p_uv3D;
     p_uv3D = Pixel23D(keypoints_1,img1,img2,camera_fx,camera_fy);
@@ -219,7 +219,7 @@ void KeypointDynamicOpticalDef(std::vector<cv::Point2f> &keypoints_1,const cv::M
     estimatePlaneRansac(p_uv3D,static_kps,dynamic_kps,3000,threshold);
 }
 
-std::vector<cv::Point2f> OpticalDefStatic(std::vector<cv::Point2f> &keypoints_1,const cv::Mat &img1,const cv::Mat &img2, double threshold,float camera_fx = 1.0F,float camera_fy = 1.0F)
+std::vector<cv::Point2f> OpticalDefStatic(std::vector<cv::Point2f> &keypoints_1,const cv::Mat &img1,const cv::Mat &img2, double threshold,float camera_fx,float camera_fy)
 {
     std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
     std::vector<cv::Point3f> p_uv3D;
@@ -265,7 +265,7 @@ void savePicture(std::vector<cv::Point2f> &Dynamic_kps,std::vector<cv::Point2f> 
     cv::imwrite(path,img1);
 }
 
-std::vector<float> Pixel23D(std::vector<cv::KeyPoint> &keypoints_1,const cv::Mat &img1,const cv::Mat &img2,float camera_fx = 1.0F,float camera_fy = 1.0F)
+std::vector<float> Pixel23D(std::vector<cv::KeyPoint> &keypoints_1,const cv::Mat &img1,const cv::Mat &img2,float camera_fx,float camera_fy)
 {
     std::vector<float> z;
     std::vector<uchar> status;
@@ -409,7 +409,7 @@ std::vector<cv::KeyPoint> estimatePlaneRansac(const std::vector<cv::KeyPoint> &p
     return static_kps;
 }
 
-void KeypointDynamicOpticalDef(std::vector<cv::KeyPoint> &keypoints_1,const cv::Mat &img1,const cv::Mat &img2,std::vector<cv::KeyPoint> &static_kps, std::vector<cv::KeyPoint> &dynamic_kps, double threshold,float camera_fx = 1.0F,float camera_fy = 1.0F)
+void KeypointDynamicOpticalDef(std::vector<cv::KeyPoint> &keypoints_1,const cv::Mat &img1,const cv::Mat &img2,std::vector<cv::KeyPoint> &static_kps, std::vector<cv::KeyPoint> &dynamic_kps, double threshold,float camera_fx, float camera_fy)
 {
     std::vector<float> kps_z;
     kps_z.reserve(keypoints_1.size());
@@ -418,7 +418,7 @@ void KeypointDynamicOpticalDef(std::vector<cv::KeyPoint> &keypoints_1,const cv::
 
 }
 
-std::vector<cv::KeyPoint> OpticalDefStatic(std::vector<cv::KeyPoint> &keypoints_1,const cv::Mat &img1,const cv::Mat &img2, double threshold,float camera_fx = 1.0F,float camera_fy = 1.0F)
+std::vector<cv::KeyPoint> OpticalDefStatic(std::vector<cv::KeyPoint> &keypoints_1,const cv::Mat &img1,const cv::Mat &img2, double threshold,float camera_fx, float camera_fy)
 {
     std::vector<float> kps_z;
     kps_z.reserve(keypoints_1.size());
